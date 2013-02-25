@@ -1,0 +1,273 @@
+<!doctype html>
+<html">
+  <head>
+    <title>Random browsing</title>
+    <script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+  </head>
+  <body>
+
+<div class="container">
+        <div class="row">
+            <div class="span10 line title">
+                <div class="row">
+                    <div class="span1">Type</div>
+                    <div class="span6">Url</div>
+                    <div class="span1">Method</div>
+                    <div class="span2">Score</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="lines" class="row">
+
+        </div>
+        <div class="footer">
+            <a title="Clear logs!" id="clear-logs" href="#"><i class="icon-ban-circle"></i></a>
+            <div class="nestor-active-handler">
+                <a title="Start inspection" id="activate" href="#"><i class="icon-play"></i></a>
+                <a title="Stop inspection" id="deactivate" href="#"><i class="icon-pause"></i></a>
+            </div>
+
+            <span class="signature">Nestor the inspector</span>
+        </div>
+</div>
+
+
+    <div id="templates">
+
+
+
+        <div data-template="line">
+            <div class="span10 line">
+                <div class="row">
+                    <div class="span1 line-type">Type</div>
+                    <div class="span6 line-url">Url</div>
+                    <div class="span1 line-method">Method</div>
+                    <div class="span2 line-time">Time</div>
+
+                    <div class="line-details">
+                        <div class="span1 time-ago">
+                            xxx seconds ago
+                        </div>
+                        <div class="span9">
+                            <div class="row">
+                                <div class="span2">
+                                    <b>Logs</b>
+                                </div>
+                                <div class="span7 ">
+                                    <a class="logs-url"target="_blank" href="">...</a>
+                                </div>
+
+                                <div class="span2 cache-control">
+                                    <b>Cache-Control</b>
+                                </div>
+                                <div class="span7 cache-control-value">
+                                    Cache-Control value
+                                </div>
+
+                                <div class="span2 cache-expires">
+                                    <b>Expires</b>
+                                </div>
+                                <div class="span7 cache-expires-value">
+                                    Expires value
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+            <div id="nestor-sleeping"></div>
+            <div id="nestor-waiting"></div>
+  </body>
+
+<style>
+
+    body{
+        width: 780px;
+        height: 570px;
+        overflow-x: hidden;
+    }
+    a{
+        color:inherit;
+    }
+    a:hover{
+        color:#222;
+    }
+    .container{
+        width: 760px;
+    }
+
+    body.nestor-active{
+        background-color: #ffffff;
+    }
+    body, body.waiting.nestor-active{
+        background-color: #b8cbbf;
+    }
+
+
+
+    #nestor-waiting{
+        position: fixed;
+        background-image: url("img/give-me-logs.png");
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        bottom: 33px;
+        left: 0px;
+        width:700px;
+        height: 600px;
+        display: none;
+    }
+    .waiting.nestor-active #nestor-waiting{
+        display: block;
+    }
+
+    #nestor-sleeping{
+        position: fixed;
+        background-image: url("img/nestor-sleeping-screen.png");
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        bottom: 33px;
+        left: 0px;
+        width:700px;
+        height: 600px;
+    }
+    .nestor-active #nestor-sleeping{
+        display: none;
+    }
+
+
+    #lines{
+        margin-top: 35px;
+        margin-bottom: 32px;
+    }
+    .line{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+        font-size: 11px;
+        margin-left: 0px;
+        padding-left: 20px;
+    }
+    .line.current-page{
+        background-color: #edfece;
+    }
+    .line-details{
+        padding-top: 4px;
+        color: rgb(180, 180, 158);
+    }
+
+
+    .title{
+        font-weight: bold;
+        background-color: #f6f6f6;
+        border-bottom: 1px solid rgb(235, 235, 235);
+        color: #5c5454;
+        padding-left: 20px;
+        padding-top: 6px;
+        padding-bottom: 5px;
+        position: fixed;
+        top:0px;
+    }
+    .title{
+        display: none;
+    }
+    .nestor-active .title{
+        display: block;
+    }
+
+
+    .footer{
+        background-color: #f6f6f6;
+        height: 20px;
+        position: fixed;
+        bottom: 0px;
+        border-top: 1px solid rgb(235, 235, 235);
+        left: 0px;
+        right: 0px;
+        padding:8px 8px 4px 8px
+
+    }
+    #clear-logs{
+        opacity: 0.9;
+    }
+    #clear-logs:hover{
+        opacity: 1;
+    }
+    #templates{
+        display: none;
+    }
+
+
+    .good-time:before,.bad-time:before,.medium-time:before{
+        content: " ";
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        margin-right: 4px;
+        margin-top: 0px;
+    }
+    .good-time:before{
+        background-color: #adff48;
+    }
+    .bad-time:before{
+        background-color: #ff0016;
+    }
+    .medium-time:before{
+        background-color: #ff8e00;
+    }
+
+
+    /*----active or not------*/
+
+    .nestor-active-handler{
+        display: inline-block;
+    }
+
+    #activate,#deactivate{
+        opacity:0.9;
+    }
+    #activate:hover,#deactivate:hover{
+        opacity:1;
+    }
+
+    #activate{
+        display: block;
+    }
+    #deactivate{
+        display: none;
+    }
+    .nestor-active #activate{
+        display: none;
+    }
+    .nestor-active #deactivate{
+        display: block;
+    }
+
+    /*-------signature---------*/
+
+    .signature{
+        font-style: italic;
+        color: rgb(133, 168, 88);
+        float: right;
+        font-size: 10px;
+    }
+
+</style>
+
+  <script  src="js/popup.js"></script>
+
+</html>

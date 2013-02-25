@@ -1,0 +1,32 @@
+{
+    "name": "Nestor the inspector",
+    "version": "0.0.1",
+    "description": "Nestor the inspector helps you to analyze you server side code",
+    "permissions": ["webRequest", "webRequestBlocking",
+        "cookies",
+        "tabs",
+        "*://*/*",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "icons": {
+        "16": "img/nestor16.png",
+        "48": "img/nestor48.png",
+        "128": "img/nestor128.png"
+    },
+    "background": {
+        "scripts": [ "js/background.js"],
+        "persistent":true
+    },
+    "browser_action": {
+        "default_icon": {
+            "38": "img/nestor38.png",
+            "19": "img/nestor19.png"
+        },
+        "default_title": "Nestor logs!",
+        "default_popup": "popup.html"
+    },
+
+    "manifest_version": 2
+}
+
