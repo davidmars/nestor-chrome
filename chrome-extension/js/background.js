@@ -31,7 +31,7 @@ function onReceivePage(details){
     if(details.responseHeaders){
         var headers = details.responseHeaders;
         for (var i = 0; i < headers.length; ++i) {
-            if(headers[i].name=="x-nestor" || headers[i].name=="x-nestor-time"){
+            if(headers[i].name=="x-nestor"){
                 //great !
                 var log=new NestorLog(details);
                 nestorLogs.push(log);
@@ -98,10 +98,12 @@ var NestorLog=function(details){
      */
     this.nestorUrl="http://";
     /**
-     * The time the script takes to execute (calculated by your Nestor script on server side).
+     * The time the script takes to execute (calculated by your Nestor script on server side). This data is loaded in ajax later.
      * @type {String}
      */
-    this.nestorTime="0.005";
+    this.nestorTime=0;
+
+
     /**
      *
      * @type {String}
@@ -120,10 +122,7 @@ var NestorLog=function(details){
             case "x-nestor":
                 me.nestorUrl=headers[j].value;
                 console.log("nestor log :"+headers[j].value );
-                break;
-            case "x-nestor-time":
-                me.nestorTime=headers[j].value;
-                console.log("nestor time :"+headers[j].value );
+
                 break;
             case "Expires":
                 me.cacheExpires=headers[j].value;
@@ -135,8 +134,22 @@ var NestorLog=function(details){
 
     }
 
+    this.json={};
+
+    $.ajax({
+        url: me.nestorUrl+"-info.json",
+        dataType:"json",
+        success:
+            function (json){
+
+                me.nestorTime=json.score;
+                updateStatus();
+            }
+    })
+
 
 }
+
 /**
  * From a time returns a score text identifier
  * @param {Number} time Time in s
@@ -144,7 +157,9 @@ var NestorLog=function(details){
  */
 NestorLog.getScore=function(time){
     time=Number(time);
-    if(time<0.5){
+    if(time==0){
+        return "unknow-time";
+    }else if(time<0.5){
         return "good-time";
     }else if(time<1){
         return "medium-time";
@@ -164,8 +179,9 @@ NestorLog.scoreToColor=function(score){
         case "medium-time":
             return "#ff8e00";
         case "bad-time":
-        default:
             return "#ff0016";
+        default:
+            return "#666666";
     }
 }
 /**

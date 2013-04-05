@@ -5,6 +5,10 @@ var MainUi={
      */
     addLine:function(nestorLog){
 
+
+
+
+
         var line=Templates.getLine(
             Convert.type(nestorLog.type),
             nestorLog.url,
@@ -48,6 +52,8 @@ var MainUi={
 
 
 }
+var ajaxes={}
+
 
 
 /**
@@ -69,6 +75,9 @@ var Convert={
         bg=chrome.extension.getBackgroundPage();
         var css =bg.NestorLog.getScore(str);
         var rounded=Math.round(str*1000)/1000;
+        if(str==0){
+            rounded="...";
+        }
         return '<span class="'+css+'">'+String(rounded)+' sec</span>';
     },
     timeAgo:function(ms){
