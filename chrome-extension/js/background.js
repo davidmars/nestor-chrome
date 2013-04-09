@@ -232,7 +232,9 @@ function clearLogs(){
 }
 
 function onSendPage(details){
+    if(details.url.indexOf("-info.json") == -1){ //prevent recursive logs
     details.requestHeaders.push({name:"X-Nestor-Is-Inspecting",value:"true"});
+    }
 
     /*for (var i = 0; i < details.requestHeaders.length; ++i) {
         if (details.requestHeaders[i].name === 'User-Agent') {

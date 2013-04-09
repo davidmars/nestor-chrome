@@ -1,6 +1,6 @@
 {
     "name": "Nestor the inspector",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "Nestor the inspector helps you to analyze you server side code",
     "permissions": ["webRequest", "webRequestBlocking",
         "cookies",
