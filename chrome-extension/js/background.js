@@ -198,6 +198,10 @@ NestorLog.getScoreColor=function(time){
  */
 function updateStatus(){
     var maxTime=0;
+    //limit number of logs
+    while(nestorLogs.length>100){
+        nestorLogs.shift();
+    }
     for(var i=0;i<nestorLogs.length;i++){
         maxTime=Math.max(maxTime,nestorLogs[i].nestorTime)
     }
